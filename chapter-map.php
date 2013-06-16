@@ -59,8 +59,6 @@ class Chapter_Map {
 
         echo "Longitude<br />";
 
-
-
     }
 
     public function map_box_save() {
