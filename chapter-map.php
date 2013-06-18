@@ -87,7 +87,7 @@ class Chapter_Map {
 
         $group_id = intval( $_POST['chapter_map_group_id'] );
 
-        $is_chapter = $_POST['chapter_map_is_chapter'];
+        $is_chapter = intval( $_POST['chapter_map_is_chapter'] );
         $latitude  = filter_var( $_POST['chapter_map_latitude'],  FILTER_VALIDATE_FLOAT );
         $longitude = filter_var( $_POST['chapter_map_longitude'], FILTER_VALIDATE_FLOAT );
 
