@@ -171,12 +171,14 @@ class Chapter_Map {
 
                     $chapter['avatar'] = bp_get_group_avatar();
 
-                    $chapters[$chapter_id] = $chapter;
+                    $chapters[$chapter['name']] = $chapter;
 
                 }
 
             }
         }
+
+        ksort( $chapters );
 
         return $chapters;
 
