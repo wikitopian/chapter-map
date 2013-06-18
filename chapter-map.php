@@ -1,8 +1,8 @@
 <?php
 /*
 * Plugin Name: Chapter Map
-* Plugin URI: https://bitbucket.org/wikitopian/chapter-map
-* Description: Designate BuddyPress groups as chapters, with a map
+* Plugin URI: http://www.github.com/wikitopian/chapter-map
+* Description: Designate BuddyPress groups as "chapters", with a Google Map
 * Version: 0.1
 * Author: Matt Parrott
 * Author URI: http://www.swarmstrategies.com/matt
