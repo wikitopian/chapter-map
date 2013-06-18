@@ -11,11 +11,27 @@
 
 class Chapter_Map {
 
+    private $settings;
+
     public function __construct() {
+
+        $default = array(
+            'page' => 'chapters',
+            'latitude' => 39.8282,
+            'longitude' => -98.5795,
+            'zoom' => 4
+        );
+
+        $this->settings = get_option( 'chapter_map_settings', $default );
 
         add_action( 'bp_groups_admin_meta_boxes', array( &$this, 'add_map_box' ) );
 
         add_action( 'admin_init', array( &$this, 'map_box_save' ) );
+
+        add_filter( 'the_content', array( &$this, 'map_page' ) );
+
+        add_action( 'wp_enqueue_scripts', array( &$this, 'map_page_script' ) );
+
     }
 
     public function add_map_box() {
@@ -32,8 +48,6 @@ class Chapter_Map {
     }
 
     public function map_box( $item ) {
-
-        error_log( 'map_box' );
 
         $group_id = $item->id;
 
@@ -80,6 +94,91 @@ class Chapter_Map {
         groups_update_groupmeta( $group_id, 'chapter_map_is_chapter', $is_chapter );
         groups_update_groupmeta( $group_id, 'chapter_map_latitude', $latitude );
         groups_update_groupmeta( $group_id, 'chapter_map_longitude', $longitude );
+
+    }
+
+    public function map_page( $content = '' ) {
+
+        if( strpos( $content, '[chapter_map]' ) > 0 ) {
+
+            $map = '<div id="map-canvas"></div>';
+
+            $content = preg_replace( '/\[chapter_map\]/', $map, $content );
+        }
+
+        if( strpos( $content, '[chapter_map_list]' ) > 0 ) {
+
+            $list = '<ul id="chapter-map-list"></ul>';
+
+            $content = preg_replace( '/\[chapter_map_list\]/', $list, $content );
+        }
+
+
+
+        return $content;
+
+    }
+
+    public function map_page_script() {
+
+        wp_enqueue_script(
+            'chapter_map_google',
+            'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false'
+        );
+
+        wp_enqueue_script(
+            'chapter_map',
+            plugin_dir_url( __FILE__ ) . 'js/chapter-map.js'
+        );
+
+        wp_localize_script(
+            'chapter_map',
+            'chapter_map',
+            array(
+                'latitude' => $this->settings['latitude'],
+                'longitude' => $this->settings['longitude'],
+                'zoom' => $this->settings['zoom'],
+                'chapters' => $this->get_chapters()
+            )
+        );
+
+        wp_enqueue_style(
+            'chapter_map',
+            plugin_dir_url( __FILE__ ) . 'css/chapter-map.css'
+        );
+
+    }
+
+    private function get_chapters() {
+
+        $chapters = array();
+
+        if( bp_has_groups() ) {
+            while( bp_groups() ) {
+                bp_the_group();
+
+                $chapter_id = bp_get_group_id();
+                if( groups_get_groupmeta( $chapter_id, 'chapter_map_is_chapter' ) ) {
+
+                    $chapter = array();
+
+                    $chapter['name'] = bp_get_group_name();
+
+                    $chapter['url'] = bp_get_group_permalink();
+
+                    $chapter['latitude'] = groups_get_groupmeta( $chapter_id, 'chapter_map_latitude' );
+                    $chapter['longitude'] = groups_get_groupmeta( $chapter_id, 'chapter_map_longitude' );
+
+                    $chapter['avatar'] = bp_get_group_avatar();
+
+                    $chapters[$chapter_id] = $chapter;
+
+                }
+
+            }
+        }
+
+        return $chapters;
 
     }
 
