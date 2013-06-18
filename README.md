@@ -4,7 +4,7 @@ Chapter Map
 Designate BuddyPress groups as "chapters", with a Google Map
 
 Installation
------------
+------------
 
     The usual.
 
