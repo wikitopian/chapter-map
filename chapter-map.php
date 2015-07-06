@@ -153,7 +153,7 @@ class Chapter_Map {
 
         $chapters = array();
 
-        if( bp_has_groups() ) {
+        if( function_exists( 'bp_is_active' ) && bp_has_groups() ) {
             while( bp_groups() ) {
                 bp_the_group();
 
