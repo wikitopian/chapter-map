@@ -1,0 +1,19 @@
+div#chapter_map_manage_add_edit {
+	display: none;
+}
+
+div#chapter_map_manage_add_edit > table {
+	background-color: white;
+}
+
+tr.chapter_map_manage_table_right > th {
+	text-align: right;
+}
+
+tr.chapter_map_manage_table_center > th {
+	text-align: center;
+}
+
+tr.chapter_map_manage_table_center > th > input[type="button"] {
+	width: 95%;
+}

@@ -9,6 +9,10 @@
 * License: GPLv2
 * */
 
+require_once( 'chapter-map-data.php' );
+
+require_once( 'chapter-map-manage.php' );
+
 class Chapter_Map {
 
     private $settings;
@@ -17,9 +21,9 @@ class Chapter_Map {
 
         $default = array(
             'page' => 'chapters',
-            'latitude' => 39.8282,
-            'longitude' => -98.5795,
-            'zoom' => 4
+            'latitude' => 21.3280681,
+            'longitude' => -157.7989705,
+            'zoom' => 2
         );
 
         $this->settings = get_option( 'chapter_map_settings', $default );
@@ -31,6 +35,10 @@ class Chapter_Map {
         add_filter( 'the_content', array( &$this, 'map_page' ) );
 
         add_action( 'wp_enqueue_scripts', array( &$this, 'map_page_script' ) );
+
+        add_action( 'admin_menu', array( &$this, 'do_menu' ) );
+
+        add_action( 'admin_enqueue_scripts', array( &$this, 'do_chapter_map_admin_script' ) );
 
     }
 
@@ -113,6 +121,7 @@ class Chapter_Map {
             $content = preg_replace( '/\[chapter_map_list\]/', $list, $content );
         }
 
+        $content .= "\n<hr />\n";
 
 
         return $content;
@@ -138,7 +147,7 @@ class Chapter_Map {
                 'latitude' => $this->settings['latitude'],
                 'longitude' => $this->settings['longitude'],
                 'zoom' => $this->settings['zoom'],
-                'chapters' => $this->get_chapters()
+                'chapters' => $this->get_chapters(),
             )
         );
 
@@ -176,6 +185,16 @@ class Chapter_Map {
                 }
 
             }
+        } else {
+
+            $chapters = Chapter_Map_Data::get_table_chapters( 0, 99 );
+
+            foreach( $chapters as &$chapter ) {
+
+                $chapter['avatar'] = get_avatar( $chapter['email'], 96 );
+
+            }
+
         }
 
         ksort( $chapters );
@@ -184,8 +203,63 @@ class Chapter_Map {
 
     }
 
+    public function do_menu() {
+
+        $menu = add_menu_page(
+            'Chapters',
+            'Chapters',
+            'edit_posts',
+            'chapter-map-edit',
+            array( &$this, 'do_chapter_page' )
+        );
+
+    }
+
+    public function do_chapter_page() {
+
+        $chapter_page = new Chapter_Map_Manage();
+
+        $chapter_page->prepare_items();
+
+        $chapter_page->display();
+
+    }
+
+    public function do_chapter_map_admin_script( $hook ) {
+
+        if( !preg_match( '/chapter-map-edit/', $hook ) ) {
+            return;
+        }
+
+        wp_enqueue_style(
+            'chapter-map-manage',
+            plugin_dir_url( __FILE__ ) . 'css/chapter-map-manage.css'
+        );
+
+        wp_enqueue_script(
+            'chapter-map-manage',
+            plugin_dir_url( __FILE__ ) . 'js/chapter-map-manage.js',
+            array( 'jquery' )
+        );
+
+        wp_localize_script(
+            'chapter-map-manage',
+            'chapter_map_manage',
+            array(
+                'true' => false,
+            )
+        );
+
+
+    }
+
 }
 
 $chapter_map = new Chapter_Map();
+
+register_activation_hook(
+	__FILE__,
+	array( 'Chapter_Map_Data', 'do_tables' )
+);
 
 ?>

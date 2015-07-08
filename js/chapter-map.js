@@ -8,6 +8,11 @@ function initialize() {
         ),
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
+
+    if( !jQuery( '#map-canvas' ).length ) {
+        return;
+    }
+
     map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
 
@@ -15,7 +20,7 @@ function initialize() {
     for(chapter_id in chapters) {
         var chapter = chapters[chapter_id];
 
-        chapter.coord = new google.maps.LatLng(chapter.latitude,chapter.longitude);
+        chapter.coord = new google.maps.LatLng(chapter.lat,chapter.lng);
 
         chapter.marker = new google.maps.Marker({
               position: chapter.coord,
@@ -36,7 +41,7 @@ function initialize() {
             + '<a href="'
             + chapter.url
             + '"><p style="font-weight: bold; text-align: center;">'
-            + chapter.name
+            + chapter.label
             + ' Chapter'
             + '</p></a>'
 
@@ -52,13 +57,12 @@ function initialize() {
         list_item.innerHTML = '<a href="'
             + chapter.url
             + '">'
-            + chapter.name
+            + chapter.label
             + ' Chapter'
             + '</a>';
 
         var list = document.getElementById('chapter-map-list');
         list.appendChild(list_item);
-        console.dir(list);
 
     }
 
