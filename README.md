@@ -1,14 +1,13 @@
 Chapter Map
 ===========
 
-Designate BuddyPress groups as "chapters", with a Google Map
+Designate BuddyPress groups as "chapters", with a Google Map. Rely on table
+of chapters if BuddyPress not installed.
 
 Installation
 ------------
 
     The usual.
-
-    BuddyPress must be installed.
 
 Usage
 -----
