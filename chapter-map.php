@@ -23,7 +23,7 @@ class Chapter_Map {
             'page' => 'chapters',
             'latitude' => 21.3280681,
             'longitude' => -157.7989705,
-            'zoom' => 2
+            'zoom' => 1
         );
 
         $this->settings = get_option( 'chapter_map_settings', $default );
@@ -191,7 +191,7 @@ class Chapter_Map {
 
             foreach( $chapters as &$chapter ) {
 
-                $chapter['avatar'] = get_avatar( $chapter['email'], 96 );
+                $chapter['avatar'] = get_avatar( $chapter['email'], 192 );
 
             }
 
@@ -205,7 +205,7 @@ class Chapter_Map {
 
     public function do_menu() {
 
-        $menu = add_menu_page(
+        add_menu_page(
             'Chapters',
             'Chapters',
             'edit_posts',
