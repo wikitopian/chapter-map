@@ -191,7 +191,7 @@ class Chapter_Map {
 
             foreach( $chapters as &$chapter ) {
 
-                $chapter['avatar'] = get_avatar( $chapter['email'], 192 );
+                $chapter['avatar'] = get_avatar( $chapter['email'], 96 );
 
             }
 

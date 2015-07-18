@@ -37,10 +37,8 @@ function initialize() {
             + chapter.url
             + '">'
             + chapter.avatar
-            + '</a><br />'
-            + '<a href="'
-            + chapter.url
-            + '"><p style="font-weight: bold; text-align: center;">'
+            + '<br />'
+            + '<p style="font-weight: bold; text-align: center;">'
             + chapter.label
             + ' Chapter'
             + '</p></a>'
