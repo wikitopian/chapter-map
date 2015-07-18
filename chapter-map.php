@@ -21,8 +21,8 @@ class Chapter_Map {
 
         $default = array(
             'page' => 'chapters',
-            'latitude' => 21.3280681,
-            'longitude' => -157.7989705,
+            'latitude' => 19.3907336,
+            'longitude' => -99.1436126,
             'zoom' => 1
         );
 
